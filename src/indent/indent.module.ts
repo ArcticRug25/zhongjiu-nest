@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common'
+import { Logger } from './../middleware/index'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { IndentService } from './indent.service'
 import { IndentController } from './indent.controller'
 
@@ -6,4 +7,8 @@ import { IndentController } from './indent.controller'
   controllers: [IndentController],
   providers: [IndentService],
 })
-export class IndentModule {}
+export class IndentModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(Logger).forRoutes('indent')
+  }
+}

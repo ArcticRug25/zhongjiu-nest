@@ -1,11 +1,18 @@
 import { TokenService } from './../token/token.service'
 import { BusinessException } from './../common/exceptions/business.exception'
 import { UserService } from './user.service'
-import { Controller, Get, Version, VERSION_NEUTRAL } from '@nestjs/common'
+import { Controller, Get, Inject, Version, VERSION_NEUTRAL } from '@nestjs/common'
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService, private tokenService: TokenService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly tokenService: TokenService,
+    @Inject('TYPE') private readonly type: string[],
+    @Inject('TOKEN') private readonly token: string,
+    @Inject('Config') private readonly base: any,
+    @Inject('Config2') private readonly base2: any,
+  ) {}
 
   @Get()
   @Version([VERSION_NEUTRAL, '1'])
@@ -13,11 +20,28 @@ export class UserController {
     return this.userService.findAll()
   }
 
+  @Get('type')
+  @Version([VERSION_NEUTRAL, '1'])
+  findType() {
+    return this.type
+  }
+
+  @Get('base')
+  @Version([VERSION_NEUTRAL, '1'])
+  findBase() {
+    return this.base
+  }
+
+  @Get('base2')
+  @Version([VERSION_NEUTRAL, '1'])
+  findBase2() {
+    return this.base2
+  }
+
   @Get('getToken')
   @Version([VERSION_NEUTRAL, '1'])
-  async getToken() {
-    const token = await this.tokenService.getToken()
-    return token
+  getToken() {
+    return this.token
   }
 
   @Get()
