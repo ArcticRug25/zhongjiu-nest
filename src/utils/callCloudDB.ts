@@ -1,10 +1,10 @@
 import axios from 'axios'
+import { WX_CONFIG } from 'src/config'
 import { getAccessToken } from 'src/utils/getAccessToken'
-import { CLOUD_ENV } from './config'
 
 const callCloudDB = async (fnName, query = {}) => {
   const ACCESS_TOKEN = await getAccessToken()
-  const body = { query, env: CLOUD_ENV }
+  const body = { query, env: WX_CONFIG.cloudENV }
   const res = await axios.post(
     `https://api.weixin.qq.com/tcb/${fnName}?access_token=${ACCESS_TOKEN}`,
     JSON.stringify(body),

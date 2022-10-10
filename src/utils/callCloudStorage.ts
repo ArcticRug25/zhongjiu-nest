@@ -1,6 +1,7 @@
+import { WX_CONFIG } from 'src/config'
+import { ConfigType } from '@nestjs/config'
 import { getAccessToken } from './getAccessToken.js'
-import * as fs from 'fs'
-import { CLOUD_ENV } from './config.js'
+import fs from 'fs'
 
 const cloudStorage = {
   async download(ctx, fileList) {
@@ -9,7 +10,7 @@ const cloudStorage = {
       method: 'POST',
       uri: `https://api.weixin.qq.com/tcb/batchdownloadfile?access_token=${ACCESS_TOKEN}`,
       body: {
-        env: CLOUD_ENV,
+        env: WX_CONFIG.cloudENV,
         file_list: fileList,
       },
       json: true,
@@ -34,7 +35,7 @@ const cloudStorage = {
       uri: `https://api.weixin.qq.com/tcb/uploadfile?access_token=${ACCESS_TOKEN}`,
       body: {
         path,
-        env: CLOUD_ENV,
+        env: WX_CONFIG.cloudENV,
       },
       json: true, // Automatically stringifies the body to JSON
     }
@@ -72,7 +73,7 @@ const cloudStorage = {
       method: 'POST',
       uri: `https://api.weixin.qq.com/tcb/batchdeletefile?access_token=${ACCESS_TOKEN}`,
       body: {
-        env: CLOUD_ENV,
+        env: WX_CONFIG.cloudENV,
         fileid_list: fileid_list,
       },
       json: true,

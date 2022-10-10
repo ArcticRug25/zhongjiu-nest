@@ -1,7 +1,7 @@
-import * as fs from 'fs'
-import * as path from 'path'
+import fs from 'fs'
+import path from 'path'
 import axios from 'axios'
-import { TOKEN_URL } from './config'
+import { TOKEN_URL } from 'src/config'
 
 const fileName = path.resolve(__dirname, './access_token.json')
 

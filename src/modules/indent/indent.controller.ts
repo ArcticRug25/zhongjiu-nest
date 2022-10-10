@@ -1,16 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject } from '@nestjs/common'
-import { IndentService } from './indent.service'
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common'
+import { ConfigType } from '@nestjs/config'
+import wxConfig from 'src/config/wx.config'
 import { CreateIndentDto } from './dto/create-indent.dto'
 import { UpdateIndentDto } from './dto/update-indent.dto'
-import { ConfigService, ConfigType } from '@nestjs/config'
-import databaseConfig from 'src/config/database.config'
+import { IndentService } from './indent.service'
 
 @Controller('indent')
 export class IndentController {
   constructor(
     private readonly indentService: IndentService,
-    private readonly configService: ConfigService,
-    @Inject(databaseConfig.KEY) private database: ConfigType<typeof databaseConfig>,
+    @Inject(wxConfig.KEY) private wx: ConfigType<typeof wxConfig>,
   ) {}
 
   @Post()
@@ -20,9 +19,6 @@ export class IndentController {
 
   @Get('t')
   test() {
-    // const d = this.configService.get('name')
-    // let a: ConfigType<typeof d>
-    // console.log(this.configService.get('name'))
     return '1'
   }
 
