@@ -2,17 +2,12 @@ import { WX_CONFIG } from 'src/config'
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import cors from 'cors'
-import { NextFunction, Request, Response } from 'express'
 import session from 'express-session'
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter'
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter'
 import { TransformInterceptor } from './common/interceptors/transform.interceptor'
-
-function MiddleWareAll(req: Request, res: Response, next: NextFunction) {
-  console.log(req.originalUrl)
-  next()
-}
+import CustomValidate from './common/validation/custom.validate'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -26,7 +21,9 @@ async function bootstrap() {
 
   // 中间件
   app.use(cors())
-  app.use(MiddleWareAll)
+
+  // 全局管道
+  app.useGlobalPipes(new CustomValidate())
 
   // session
   app.use(
