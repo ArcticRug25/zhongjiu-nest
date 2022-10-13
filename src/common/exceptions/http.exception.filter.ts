@@ -17,16 +17,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this.response = ctx.getResponse<Response>()
     this.request = ctx.getRequest<Request>()
     this.exception = exception
+    console.log(this.exception.getResponse())
 
     // 处理业务异常
     if (exception instanceof BusinessException) {
       return this._handleBusinessException()
     }
-    console.log(this.exception)
+
     // 处理验证异常
-    // if (exception instanceof BadRequestException) {
-    //   return this._handleValidateException()
-    // }
+    if (exception instanceof BadRequestException) {
+      return this._handleValidateException()
+    }
 
     // 处理基础业务异常
     this._handleBaseHttpException()
@@ -42,14 +43,26 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 
   private _handleValidateException() {
-    if (Array.isArray(this.exception.message)) {
-      const message = this.exception.message.reduce((prev, msg) => {
+    const errResponse = this.exception.getResponse()
+    const message: string[] | string = errResponse['message']
+    if (Array.isArray(message)) {
+      errResponse['message'] = message.reduce((prev, msg) => {
+        const [field, errMessage] = msg.split('-')
+        const idx = prev.findIndex((el) => el.field === field)
+        if (idx > -1) {
+          prev[idx].message.push(errMessage)
+        } else {
+          prev.push({
+            field,
+            message: [errMessage],
+          })
+        }
         return prev
       }, [] as ValidateErrMessage[])
-    } else {
     }
-    console.log(this.request)
-    return true
+    this._send(HttpStatus.UNPROCESSABLE_ENTITY, {
+      message: errResponse['message'],
+    })
   }
 
   private _handleBusinessException() {
