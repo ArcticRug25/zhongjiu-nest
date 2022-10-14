@@ -44,22 +44,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
   private _handleValidateException() {
     const errResponse = this.exception.getResponse()
-    const message: string[] | string = errResponse['message']
-    if (Array.isArray(message)) {
-      errResponse['message'] = message.reduce((prev, msg) => {
-        const [field, errMessage] = msg.split('-')
-        const idx = prev.findIndex((el) => el.field === field)
-        if (idx > -1) {
-          prev[idx].message.push(errMessage)
-        } else {
-          prev.push({
-            field,
-            message: [errMessage],
-          })
-        }
-        return prev
-      }, [] as ValidateErrMessage[])
-    }
     this._send(HttpStatus.UNPROCESSABLE_ENTITY, {
       message: errResponse['message'],
     })
