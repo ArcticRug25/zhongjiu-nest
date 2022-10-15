@@ -3,9 +3,9 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import config from './config'
+import config from './common/config'
 import { IndentModule } from './modules/indent/indent.module'
-import { getConfig } from './utils/config'
+import { getConfig } from './common/utils/config'
 import { UserModule } from './modules/user/user.module'
 
 @Module({

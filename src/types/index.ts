@@ -7,7 +7,7 @@ export const enum APP_CONFIG {
 
 export interface ITokenConfig {
   secret: string
-  signOptions: JwtSignOptions
+  option: JwtSignOptions
 }
 
 export type { User } from '@prisma/client'

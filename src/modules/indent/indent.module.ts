@@ -1,4 +1,4 @@
-import { Logger } from '../../middleware/index'
+import { Logger } from '../../common/middleware/index'
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { IndentService } from './indent.service'
 import { IndentController } from './indent.controller'

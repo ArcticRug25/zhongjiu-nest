@@ -1,4 +1,3 @@
-import { WX_CONFIG } from 'src/config'
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import cors from 'cors'
@@ -7,11 +6,13 @@ import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter'
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter'
 import { TransformInterceptor } from './common/interceptors/transform.interceptor'
-import CustomValidate from './common/validation/custom.validate'
+import CustomValidate from './common/validate/custom.validate'
+import { APP_CONFIG } from './types'
+import { getConfig } from './common/utils/config'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn'],
+    logger: ['error', 'warn', 'log'],
   })
 
   app.enableVersioning({
@@ -29,7 +30,7 @@ async function bootstrap() {
   app.use(
     session({
       name: 'zhongjiu.sid',
-      secret: WX_CONFIG.appId,
+      secret: getConfig(APP_CONFIG.WX_CONFIG).appId,
       rolling: true,
       cookie: {
         maxAge: 72000,

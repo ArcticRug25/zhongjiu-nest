@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { CreateIndentDto } from './dto/create-indent.dto'
 import { UpdateIndentDto } from './dto/update-indent.dto'
-import { callCloudDB } from 'src/utils/callCloudDB'
+import { callCloudDB } from 'src/common/utils/callCloudDB'
 
 @Injectable()
 export class IndentService {
