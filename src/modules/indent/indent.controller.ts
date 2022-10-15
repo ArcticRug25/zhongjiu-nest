@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common'
+import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard'
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common'
 import { ConfigService, ConfigType } from '@nestjs/config'
 import wxConfig from 'src/common/config/wx.config'
 import { CreateIndentDto } from './dto/create-indent.dto'
@@ -23,6 +24,7 @@ export class IndentController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.indentService.findAll()
   }
