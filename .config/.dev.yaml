@@ -1,2 +1,7 @@
 WX_CONFIG:
   appId: "wxe7777389bcce75bf"
+TOKEN_CONFIG:
+  secret: "1w2y3w4"
+  option:
+    expiresIn: '7d'
+  
