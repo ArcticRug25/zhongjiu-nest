@@ -1,5 +1,5 @@
-import { User } from '@prisma/client'
 import { ForbiddenException, Injectable } from '@nestjs/common'
+import { User } from '@prisma/client'
 import { hash, verify } from 'argon2'
 import { PrismaService } from './../prisma/prisma.service'
 import { CreateUserDto } from './dto/create-user.dto'
