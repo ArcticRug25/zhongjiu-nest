@@ -1,5 +1,14 @@
+import { formatDate } from '../../common/utils/date'
 import { BusinessException } from './business.exception'
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, BadRequestException } from '@nestjs/common'
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  BadRequestException,
+  Logger,
+} from '@nestjs/common'
 import { Request, Response } from 'express'
 
 interface ValidateErrMessage {
@@ -17,8 +26,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this.response = ctx.getResponse<Response>()
     this.request = ctx.getRequest<Request>()
     this.exception = exception
-    console.log(this.exception.getResponse())
-
+    this.logger(this.request, exception)
     // 处理业务异常
     if (exception instanceof BusinessException) {
       return this._handleBusinessException()
@@ -38,7 +46,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     this._send(status, {
       timestamp: new Date().toISOString(),
       path: this.request.url,
-      message: this.exception.getResponse(),
+      message: this.exception.getResponse()['message'],
     })
   }
 
@@ -66,6 +74,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
         },
         errResponse,
       ),
+    )
+  }
+
+  protected logger(req: Request, exception) {
+    Logger.error(
+      `【${formatDate(Date.now())}】${req.method} ${req.url}`,
+      JSON.stringify(exception),
+      'HttpExceptionFilter',
     )
   }
 }

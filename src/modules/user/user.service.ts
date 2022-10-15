@@ -1,13 +1,13 @@
-import { PrismaService } from './../prisma/prisma.service'
-import { ForbiddenException, Injectable } from '@nestjs/common'
-import { CreateUserDto } from './dto/create-user.dto'
-import { JwtService } from '@nestjs/jwt'
 import { User } from '@prisma/client'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 import { hash, verify } from 'argon2'
+import { PrismaService } from './../prisma/prisma.service'
+import { CreateUserDto } from './dto/create-user.dto'
+import { LoginUserDto } from './dto/login-user.dto'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService, private jwt: JwtService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async register(createUserDto: CreateUserDto) {
     const user = await this.prisma.user.create({
@@ -17,29 +17,26 @@ export class UserService {
       },
     })
 
-    return this.token(user)
+    return user
   }
 
-  async login({ username, password }: CreateUserDto) {
+  async login({ username, password }: LoginUserDto) {
+    const user = await this.findUser(username)
+
+    const passwordMatch = await verify(user.password, password)
+
+    if (!passwordMatch) throw new ForbiddenException('密码输入错误')
+
+    return user
+  }
+
+  async findUser(username: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: {
         username,
       },
     })
 
-    const passwordMatch = await verify(user.password, password)
-
-    if (!passwordMatch) throw new ForbiddenException('密码输入除外')
-
-    return this.token(user)
-  }
-
-  private async token({ id, username }: User) {
-    return {
-      token: await this.jwt.signAsync({
-        username,
-        sub: id,
-      }),
-    }
+    return user
   }
 }
