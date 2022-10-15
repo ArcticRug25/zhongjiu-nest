@@ -1,4 +1,3 @@
-import { LocalAuthGuard } from './../auth/guards/local-auth.guard'
 import { LoginUserDto } from './dto/login-user.dto'
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -15,10 +14,9 @@ export class UserController {
     return this.userService.register(createUserDto)
   }
 
-  @UseGuards(AuthGuard('local'))
   @Post('login')
-  login(@Req() req) {
-    return req.user
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.userService.login(loginUserDto)
   }
 
   @Get()

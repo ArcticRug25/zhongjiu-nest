@@ -23,6 +23,8 @@ export class UserService {
   async login({ username, password }: LoginUserDto) {
     const user = await this.findUser(username)
 
+    if (!user) throw new ForbiddenException('用户名不存在')
+
     const passwordMatch = await verify(user.password, password)
 
     if (!passwordMatch) throw new ForbiddenException('密码输入错误')
