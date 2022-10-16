@@ -1,5 +1,6 @@
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common'
-import { NestFactory } from '@nestjs/core'
+import { NestFactory, Reflector } from '@nestjs/core'
 import cors from 'cors'
 import session from 'express-session'
 import { AppModule } from './app.module'
@@ -43,6 +44,8 @@ async function bootstrap() {
 
   // 异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter())
+
+  app.useGlobalGuards(new JwtAuthGuard(new Reflector()))
 
   await app.listen(3000)
 }

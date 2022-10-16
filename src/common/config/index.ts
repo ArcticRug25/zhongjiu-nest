@@ -6,3 +6,5 @@ const TOKEN_URL = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_cre
 
 export { WX_CONFIG, TOKEN_URL }
 export default [wxConfig]
+
+export const whiteList = ['/user/login', '/user/register']
