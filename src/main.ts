@@ -45,7 +45,7 @@ async function bootstrap() {
   // 异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter())
 
-  // app.useGlobalGuards(new JwtAuthGuard(new Reflector()))
+  app.useGlobalGuards(new JwtAuthGuard(new Reflector()))
 
   app.setGlobalPrefix('api')
 
