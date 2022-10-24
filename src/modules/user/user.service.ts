@@ -41,4 +41,10 @@ export class UserService {
 
     return user
   }
+
+  async findAllUser(): Promise<User[]> {
+    const user = await this.prisma.user.findMany()
+
+    return user
+  }
 }

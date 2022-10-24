@@ -1,5 +1,14 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common'
-import { Request } from 'express'
+import { UserEntity } from './entities/user.entity'
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { Public } from 'src/common/decorator/public.decorator'
 import { AuthService } from './../auth/auth.service'
 import { LocalAuthGuard } from './../auth/guards/local-auth.guard'
@@ -29,7 +38,10 @@ export class UserController {
   }
 
   @Get()
-  getAllUser(@Req() req: Request) {
-    // console.log('req12 ', req)
+  @Public()
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getAllUser() {
+    const users = await this.userService.findAllUser()
+    return users.map((user) => new UserEntity(user))
   }
 }

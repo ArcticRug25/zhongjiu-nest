@@ -1,5 +1,5 @@
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
-import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common'
+import { ClassSerializerInterceptor, VersioningType, VERSION_NEUTRAL } from '@nestjs/common'
 import { NestFactory, Reflector } from '@nestjs/core'
 import cors from 'cors'
 import session from 'express-session'
@@ -40,7 +40,7 @@ async function bootstrap() {
   )
 
   // 统一响应体格式
-  app.useGlobalInterceptors(new TransformInterceptor())
+  app.useGlobalInterceptors(new TransformInterceptor(), new ClassSerializerInterceptor(app.get(Reflector)))
 
   // 异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter())

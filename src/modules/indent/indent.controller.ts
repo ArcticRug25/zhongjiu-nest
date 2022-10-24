@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common'
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { ConfigType } from '@nestjs/config'
 import wxConfig from 'src/common/config/wx.config'
 import { Public } from 'src/common/decorator/public.decorator'
@@ -24,6 +36,7 @@ export class IndentController {
     return 2
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.indentService.findAll()
