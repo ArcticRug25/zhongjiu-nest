@@ -15,4 +15,6 @@ model User {
   username String @unique
   password String
   role String?
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
