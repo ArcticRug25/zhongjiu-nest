@@ -6,6 +6,8 @@ export class UserEntity {
   password: string
   @Transform(({ value }) => dayjs(value).format('YYYY-MM-DD'))
   createAt: string
+  @Transform(({ value }) => dayjs(value).format('YYYY-MM-DD'))
+  updateAt: string
   constructor(options: Partial<User>) {
     Object.assign(this, options)
   }
